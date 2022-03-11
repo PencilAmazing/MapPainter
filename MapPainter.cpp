@@ -21,23 +21,14 @@ int main(void)
     const int screenWidth = 600;
     const int screenHeight = 650;
 
-    const int mapSize = 100;
-    const int padding = 0;
-
     CellType selectedType = CellType::Sand;
 
     static_assert(mapSize % 2 == 0); // why not
 
-    std::vector<std::vector<std::shared_ptr<Cell>>> workMap;
-    workMap.resize(mapSize, std::vector<std::shared_ptr<Cell>>(mapSize));
-    for (std::vector<std::shared_ptr<Cell>>& i : workMap)
-        for (std::shared_ptr<Cell>& j : i)
-            j = std::make_shared<Cell>();
-    std::vector<std::vector<std::shared_ptr<Cell>>> renderMap;
-    renderMap.resize(mapSize, std::vector<std::shared_ptr<Cell>>(mapSize));
-    for (std::vector<std::shared_ptr<Cell>>& i : renderMap)
-        for (std::shared_ptr<Cell>& j : i)
-            j = std::make_shared<Cell>();
+    CellMap workMap;
+    workMap.resize(mapSize, std::vector<Cell>(mapSize, Cell()));
+    CellMap renderMap;
+    renderMap.resize(mapSize, std::vector<Cell>(mapSize, Cell()));
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
@@ -52,8 +43,7 @@ int main(void)
             for (int j = 0; j < mapSize; j++) {
                 //renderMap[i][j].reset();
                 renderMap[i][j] = workMap[i][j];
-                workMap[i][j].reset();
-                workMap[i][j] = std::make_shared<Cell>();
+                workMap[i][j] = Cell();
             }
         BeginDrawing();
 
@@ -62,10 +52,10 @@ int main(void)
 
         for (int i = 0; i < mapSize; i++) {
             for (int j = 0; j < mapSize; j++) {
-                std::shared_ptr<Cell> cell = renderMap[i][j];
+                Cell& cell = renderMap[i][j];
                 int x = (i * Cell::SIZE);
                 int y = (j * Cell::SIZE);
-                Color col = cell->col();
+                Color col = cell._col;
                 //if (selected.x == x && selected.y == y)
                     //col = GOLD;
                 DrawRectangle(x + padding * i, y + padding * j, Cell::SIZE, Cell::SIZE, col);
@@ -92,7 +82,7 @@ int main(void)
             selected.x = fmaxf(0, selected.x);
             selected.y = fmaxf(0, selected.y);
             if (selected.x < mapSize * Cell::SIZE && selected.y < mapSize * Cell::SIZE) {
-                std::shared_ptr<Cell>& cell = renderMap[(int)selected.x / Cell::SIZE][(int)selected.y / Cell::SIZE];
+                Cell& cell = renderMap[(int)selected.x / Cell::SIZE][(int)selected.y / Cell::SIZE];
                 cell = MakeCell(selectedType);
             }
         }

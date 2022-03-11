@@ -3,31 +3,32 @@
 //#include "cell.h"
 #include "sand.h"
 
-class Static : public Cell{
-public:
-    Static()
-        : Cell(CellType::Static, BLACK)
-    {
-        unsigned char random = (unsigned char)GetRandomValue(0, 225);
-        //float random = (float)GetRandomValue(70, 90) / 100.f;
-        //_col = Color{ (unsigned char)(random * GOLD.r), (unsigned char)(random * GOLD.g),(unsigned char)(random * (float)GOLD.b), 255 };
-        _col = Color{ random, random,random, 255 };
-    };
+Cell CreateStatic(short vx = 0, short vy = 1)
+{
+    unsigned char random = (unsigned char)GetRandomValue(0, 225);
+    //float random = (float)GetRandomValue(70, 90) / 100.f;
+    //_col = Color{ (unsigned char)(random * GOLD.r), (unsigned char)(random * GOLD.g),(unsigned char)(random * (float)GOLD.b), 255 };
+    Color _col = Color{ random, random, random, 255 };
+    return Cell(CellType::Static, _col, 3, vx, vy);
+};
 
-    // I don't like how I copied this
-    // Maybe make it swap pointers instead of allocating new cells everytime
-    // Polymorphism isn't necessary here but I'm keeping it anyways
-    void ProcessCell(CellularData& data, CellMap& swapmap, const CellMap& prevGeneration) override
-    {
-        Vector2 target = { data.x, data.y + 1 };
-        std::shared_ptr<Static> newGeneration = std::make_shared<Static>();
+void ProcessStatic(CellularData& data, CellMap& output, const CellMap& prevGeneration)
+{
+    Cell cell = prevGeneration[data.x][data.y];
+    unsigned char random = (unsigned char)GetRandomValue(0, 225);
+    cell._col = Color{ random, random, random, 255 };
+    // Apply motion equations
+    // FIXME particles going too fast might pass through others
+    // Apply line tracing collision later
+    int targetx = std::clamp(data.x + cell._vx, 0, mapSize - 1);
+    int targety = std::clamp(data.y + cell._vy, 0, mapSize - 1);
 
-        if (target.y >= prevGeneration.size() || prevGeneration[target.x][target.y]->id() != CellType::Air) {
-            //swapmap[data.x][data.y] = std::make_shared<Sand>();
-            swapmap[data.x][data.y] = newGeneration;
-        } else {
-            //swapmap[target.x][target.y] = std::make_shared<Sand>();
-            swapmap[target.x][target.y] = newGeneration;
-        }
+    //if (target.y >= prevGeneration.size() || prevGeneration[target.x][target.y]._id != CellType::Air) {
+    if (prevGeneration[targetx][targety]._id != CellType::Air) {
+        // Collision
+        targetx = data.x;
+        targety = data.y;
+        // FIXME momentum where
     }
+    output[targetx][targety] = cell;
 };

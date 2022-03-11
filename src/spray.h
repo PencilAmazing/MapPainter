@@ -1,0 +1,30 @@
+#pragma once
+
+#include "types.h"
+#include "cell.h"
+
+Cell CreateSpray(short vx = 0, short vy = 2)
+{
+    float random = (float)GetRandomValue(70, 90) / 100.f;
+    Color base = GREEN;
+    Color _col = Color{ (unsigned char)(random * base.r), (unsigned char)(random * base.g),(unsigned char)(random * base.b), 255 };
+    vx = (short)GetRandomValue(-5, 5);
+    return Cell(CellType::Spray, _col, 1, vx, vy);
+};
+
+void ProcessSpray(CellularData& data, CellMap& output, const CellMap& prevGeneration)
+{
+    // Copy data
+    Cell cell = prevGeneration[data.x][data.y];
+    // Apply motion equations
+    // FIXME particles going too fast might pass through others
+    // Apply line tracing collision later
+    int targetx = std::clamp(data.x + cell._vx, 0, mapSize - 1);
+    int targety = std::clamp(data.y + cell._vy, 0, mapSize - 1);
+
+    if (prevGeneration[targetx][targety]._id != CellType::Air) {
+        targetx = data.x;
+        targety = data.y;
+    }
+    output[targetx][targety] = cell;
+};

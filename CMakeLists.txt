@@ -10,5 +10,5 @@ include_directories("D:/dev/entt/src")
 add_subdirectory(libs/raylib)
 
 # Add source to this project's executable.
-add_executable (MapPainter "MapPainter.cpp" "MapPainter.h"  "src/cell.h" "src/sand.h" "src/types.h"    "src/static.h")
+add_executable (MapPainter "MapPainter.cpp" "MapPainter.h"  "src/cell.h" "src/sand.h" "src/types.h"    "src/static.h" "src/spray.h" "src/moose.h")
 target_link_libraries(MapPainter raylib)

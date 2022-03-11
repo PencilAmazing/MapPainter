@@ -5,30 +5,26 @@
 
 #include "types.h"
 
-// Each cell could hold state about pixel
-
+// Should be a data only class
 class Cell {
-protected:
+    // Everything is public because i trust you all fellas
+    // Assume SI units unless otherwise
+public:
     CellType _id;
     Color _col;
-    Vector2 _velocity;
-    int _mass; // In grams
-    Cell(CellType type, Color color, Vector2 Velocity = Vector2Zero())
+    unsigned short int _mass;
+    short _vx, _vy;
+
+    Cell(CellType type = CellType::Air, Color color = SKYBLUE, unsigned short mass = 0, short vx = 0, short vy = 0)
+        : _id(type), _col(color), _mass(mass), _vx(vx), _vy(vy)
     {
-        _id = type;
-        _col = color;
-        _velocity = Velocity;
     };
-public:
-    Cell() : _id(CellType::Air), _col(SKYBLUE) {};
-    CellType id() const { return _id; };
-    Color col() const { return _col; };
-    Vector2 velocity() const { return _velocity; };
 
     void ApplyImpulse(Vector2 impulse)
     {
-        _velocity.x = (impulse.x + _mass * _velocity.x) / _mass;
-        _velocity.y = (impulse.y + _mass * _velocity.y) / _mass;
+        if (_mass <= 0) return;
+        _vx = (impulse.x + _mass * _vx) / _mass;
+        _vy = (impulse.y + _mass * _vy) / _mass;
     };
 
     static const int SIZE = 5;
