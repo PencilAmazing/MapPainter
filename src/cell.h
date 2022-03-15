@@ -7,24 +7,15 @@
 
 // Should be a data only class
 class Cell {
-    // Everything is public because i trust you all fellas
-    // Assume SI units unless otherwise
 public:
+    // Everything is public because i trust you all fellas
     CellType _id;
     Color _col;
-    unsigned short int _mass;
-    short _vx, _vy;
+    int _vx, _vy;
 
-    Cell(CellType type = CellType::Air, Color color = SKYBLUE, unsigned short mass = 0, short vx = 0, short vy = 0)
-        : _id(type), _col(color), _mass(mass), _vx(vx), _vy(vy)
+    Cell(CellType type = CellType::Air, Color color = SKYBLUE, short vx = 0, short vy = 0)
+        : _id(type), _col(color), _vx(vx), _vy(vy)
     {
-    };
-
-    void ApplyImpulse(Vector2 impulse)
-    {
-        if (_mass <= 0) return;
-        _vx = (impulse.x + _mass * _vx) / _mass;
-        _vy = (impulse.y + _mass * _vy) / _mass;
     };
 
     static const int SIZE = 5;
@@ -53,3 +44,13 @@ public:
     virtual void ProcessCell(CellularData& data, CellMap& map, const CellMap& prevGeneration) { return; };
 
 };
+
+Cell CreateAir()
+{
+    return Cell();
+};
+
+void ProcessAir(CellularData&, CellMap&)
+{
+    return;
+}

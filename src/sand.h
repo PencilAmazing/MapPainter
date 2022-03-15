@@ -4,12 +4,12 @@
 #include "cell.h"
 
 // Utility function to create sand particles
-Cell CreateSand(short vx = 0, short vy = 1)
+Cell CreateSand()
 {
     float random = (float)GetRandomValue(70, 90) / 100.f;
     Color _col = Color{ (unsigned char)(random * GOLD.r), (unsigned char)(random * GOLD.g),(unsigned char)(random * (float)GOLD.b), 255 };
-    vx = (short)GetRandomValue(-1, 1);
-    return Cell(CellType::Sand, _col, 1, vx, vy);
+    int vx = (short)GetRandomValue(-1, 1);
+    return Cell(CellType::Sand, _col, vx, 1);
 };
 
 // Writes data to new generation

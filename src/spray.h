@@ -3,13 +3,13 @@
 #include "types.h"
 #include "cell.h"
 
-Cell CreateSpray(short vx = 0, short vy = 2)
+Cell CreateSpray()
 {
     float random = (float)GetRandomValue(70, 90) / 100.f;
     Color base = GREEN;
     Color _col = Color{ (unsigned char)(random * base.r), (unsigned char)(random * base.g),(unsigned char)(random * base.b), 255 };
-    vx = (short)GetRandomValue(-5, 5);
-    return Cell(CellType::Spray, _col, 1, vx, vy);
+    int vx = (short)GetRandomValue(-5, 5);
+    return Cell(CellType::Spray, _col, vx, 1);
 };
 
 void ProcessSpray(CellularData& data, CellMap& output, const CellMap& prevGeneration)

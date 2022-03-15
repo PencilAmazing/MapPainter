@@ -3,13 +3,13 @@
 //#include "cell.h"
 #include "sand.h"
 
-Cell CreateStatic(short vx = 0, short vy = 1)
+Cell CreateStatic()
 {
     unsigned char random = (unsigned char)GetRandomValue(0, 225);
     //float random = (float)GetRandomValue(70, 90) / 100.f;
     //_col = Color{ (unsigned char)(random * GOLD.r), (unsigned char)(random * GOLD.g),(unsigned char)(random * (float)GOLD.b), 255 };
     Color _col = Color{ random, random, random, 255 };
-    return Cell(CellType::Static, _col, 3, vx, vy);
+    return Cell(CellType::Static, _col, 0, 1);
 };
 
 void ProcessStatic(CellularData& data, CellMap& output, const CellMap& prevGeneration)

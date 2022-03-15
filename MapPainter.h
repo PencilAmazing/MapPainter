@@ -35,23 +35,23 @@ const std::vector<std::string> adjectives = {
     "little"
 };
 
+typedef struct OperationPair {
+    Cell(*Create)();
+    void (*Process)(CellularData&, CellMap&);
+} OperationPair;
+
+struct OperationPair Operations[] = {
+    OperationPair {CreateAir, ProcessAir}, // Air
+    OperationPair {CreateSand, ProcessSand}, // Sand
+    OperationPair {CreateStatic, ProcessStatic}, // Static
+    OperationPair {CreateSpray, ProcessSpray}, // Spray
+    OperationPair {CreateMoose, ProcessMoose} // Moose
+};
+
 Cell MakeCell(CellType type)
 {
-    switch (type) {
-    case CellType::Air:
-        return Cell();
-    case CellType::Sand:
-        return CreateSand();
-    case CellType::Static:
-        return CreateStatic();
-    case CellType::Spray:
-        return CreateSpray();
-    case CellType::Moose:
-        return CreateMoose();
-    default:
-        assert(false); // not cool
-        return Cell();
-    }
+    if (type >= CellType::END_TYPE) return Operations[(int)CellType::Air].Create();
+    return Operations[(int)type].Create();
 }
 
 CellType QuerySelectedType(int key)
@@ -74,28 +74,11 @@ CellType QuerySelectedType(int key)
     }
 }
 
-// I wanted this to be a id->function hashmap
-// this is why function pointers exist
-void ProcessCell(const Cell& cell, CellularData& data, CellMap& map, const CellMap& prevGeneration)
+void ProcessCell(const Cell& cell, CellularData& data, CellMap& map)
 {
-    switch (cell._id) {
-    case CellType::Air:
-        break; // :)
-    case CellType::Sand:
-        ProcessSand(data, map, prevGeneration);
-        break;
-    case CellType::Static:
-        ProcessStatic(data, map, prevGeneration);
-        break;
-    case CellType::Spray:
-        ProcessSpray(data, map, prevGeneration);
-        break;
-    case CellType::Moose:
-        ProcessMoose(data, map, prevGeneration);
-        break;
-    default:
-        break; // :(
-    }
+    CellType type = cell._id;
+    if (type >= CellType::END_TYPE) return Operations[(int)CellType::Air].Process(data, map);
+    Operations[(int)type].Process(data, map);
 }
 
 void ProcessMap(CellMap& map, const CellMap& prevGeneration)
