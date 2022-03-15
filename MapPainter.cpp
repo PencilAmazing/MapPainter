@@ -30,7 +30,10 @@ int main(void)
     CellMap renderMap;
     renderMap.resize(mapSize, std::vector<Cell>(mapSize, Cell()));
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    std::string title = std::string("Falling sand but ");
+    title.append(adjectives[GetRandomValue(0, adjectives.size() - 1)]);
+
+    InitWindow(screenWidth, screenHeight, title.c_str());
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
 
@@ -61,7 +64,6 @@ int main(void)
                 DrawRectangle(x + padding * i, y + padding * j, Cell::SIZE, Cell::SIZE, col);
             }
         }
-        //DrawRectangle(mousepos.x - 5, mousepos.y - 5, 10, 10, DARKBLUE);
 
         std::string debug("Mouse location at: ");
         debug += std::to_string(mousepos.x);

@@ -12,6 +12,29 @@
 #include "src/spray.h"
 #include "src/moose.h"
 
+const std::vector<std::string> adjectives = {
+    "untidy",
+    "damaging",
+    "disgusting",
+    "nonstop",
+    "panoramic",
+    "fretful",
+    "left",
+    "ablaze",
+    "educated",
+    "animated",
+    "jittery",
+    "serious",
+    "elite",
+    "actually",
+    "soft",
+    "neat",
+    "tested",
+    "aboriginal",
+    "splendid",
+    "little"
+};
+
 Cell MakeCell(CellType type)
 {
     switch (type) {
