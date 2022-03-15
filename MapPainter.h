@@ -81,16 +81,16 @@ void ProcessCell(const Cell& cell, CellularData& data, CellMap& map)
     Operations[(int)type].Process(data, map);
 }
 
-void ProcessMap(CellMap& map, const CellMap& prevGeneration)
+void ProcessMap(CellMap& map, bool the_flipper)
 {
     int mapSize = map.size();
     for (int i = 0; i < mapSize; i++) {
         for (int j = 0; j < mapSize; j++) {
-            const Cell& cell = prevGeneration[i][j];
-            //const CellType type = cell->id();
+            const Cell& cell = map[i][j];
             CellularData data = { i,j };
             // this is stupid
-            ProcessCell(cell, data, map, prevGeneration);
+            if (cell.flipper != the_flipper)
+                ProcessCell(cell, data, map);
         }
     }
 };

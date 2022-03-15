@@ -12,11 +12,10 @@ Cell CreateSand()
     return Cell(CellType::Sand, _col, vx, 1);
 };
 
-// Writes data to new generation
-void ProcessSand(CellularData& data, CellMap& output, const CellMap& prevGeneration)
+void ProcessSand(CellularData& data, CellMap& map)
 {
     // Copy data
-    Cell cell = prevGeneration[data.x][data.y];
+    Cell cell = map[data.x][data.y];
     // Apply motion equations
     // FIXME particles going too fast might pass through others
     // Apply line tracing collision later
@@ -24,13 +23,14 @@ void ProcessSand(CellularData& data, CellMap& output, const CellMap& prevGenerat
     int targety = std::clamp(data.y + cell._vy, 0, mapSize - 1);
 
     //if (target.y >= prevGeneration.size() || prevGeneration[target.x][target.y]._id != CellType::Air) {
-    if (prevGeneration[targetx][targety]._id != CellType::Air) {
+    if (map[targetx][targety]._id != CellType::Air) {
         // Collision
         targetx = data.x;
         targety = data.y;
         // FIXME momentum where
-        cell._vx *= GetRandomValue(-1, 1);
     }
     cell._vx *= GetRandomValue(-1, 1);
-    output[targetx][targety] = cell;
+    map[data.x][data.y] = CreateAir();
+    cell.flipper = !cell.flipper;
+    map[targetx][targety] = cell;
 };

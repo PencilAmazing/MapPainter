@@ -12,9 +12,9 @@ Cell CreateStatic()
     return Cell(CellType::Static, _col, 0, 1);
 };
 
-void ProcessStatic(CellularData& data, CellMap& output, const CellMap& prevGeneration)
+void ProcessStatic(CellularData& data, CellMap& map)
 {
-    Cell cell = prevGeneration[data.x][data.y];
+    Cell cell = map[data.x][data.y];
     unsigned char random = (unsigned char)GetRandomValue(0, 225);
     cell._col = Color{ random, random, random, 255 };
     // Apply motion equations
@@ -24,11 +24,13 @@ void ProcessStatic(CellularData& data, CellMap& output, const CellMap& prevGener
     int targety = std::clamp(data.y + cell._vy, 0, mapSize - 1);
 
     //if (target.y >= prevGeneration.size() || prevGeneration[target.x][target.y]._id != CellType::Air) {
-    if (prevGeneration[targetx][targety]._id != CellType::Air) {
+    if (map[targetx][targety]._id != CellType::Air) {
         // Collision
         targetx = data.x;
         targety = data.y;
         // FIXME momentum where
     }
-    output[targetx][targety] = cell;
+    map[data.x][data.y] = CreateAir();
+    cell.flipper = !cell.flipper;
+    map[targetx][targety] = cell;
 };

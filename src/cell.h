@@ -12,9 +12,10 @@ public:
     CellType _id;
     Color _col;
     int _vx, _vy;
+    bool flipper;
 
     Cell(CellType type = CellType::Air, Color color = SKYBLUE, short vx = 0, short vy = 0)
-        : _id(type), _col(color), _vx(vx), _vy(vy)
+        : _id(type), _col(color), _vx(vx), _vy(vy), flipper(false)
     {
     };
 

@@ -22,13 +22,12 @@ int main(void)
     const int screenHeight = 650;
 
     CellType selectedType = CellType::Sand;
+    bool the_flipper = true;
 
     static_assert(mapSize % 2 == 0); // why not
 
     CellMap workMap;
     workMap.resize(mapSize, std::vector<Cell>(mapSize, Cell()));
-    CellMap renderMap;
-    renderMap.resize(mapSize, std::vector<Cell>(mapSize, Cell()));
 
     std::string title = std::string("Falling sand but ");
     title.append(adjectives[GetRandomValue(0, adjectives.size() - 1)]);
@@ -40,14 +39,8 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        ProcessMap(workMap, renderMap);
-        //workMap.swap(renderMap);
-        for (int i = 0; i < mapSize; i++)
-            for (int j = 0; j < mapSize; j++) {
-                //renderMap[i][j].reset();
-                renderMap[i][j] = workMap[i][j];
-                workMap[i][j] = Cell();
-            }
+        ProcessMap(workMap, the_flipper);
+        the_flipper = !the_flipper;
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -55,7 +48,7 @@ int main(void)
 
         for (int i = 0; i < mapSize; i++) {
             for (int j = 0; j < mapSize; j++) {
-                Cell& cell = renderMap[i][j];
+                Cell& cell = workMap[i][j];
                 int x = (i * Cell::SIZE);
                 int y = (j * Cell::SIZE);
                 Color col = cell._col;
@@ -84,7 +77,7 @@ int main(void)
             selected.x = fmaxf(0, selected.x);
             selected.y = fmaxf(0, selected.y);
             if (selected.x < mapSize * Cell::SIZE && selected.y < mapSize * Cell::SIZE) {
-                Cell& cell = renderMap[(int)selected.x / Cell::SIZE][(int)selected.y / Cell::SIZE];
+                Cell& cell = workMap[(int)selected.x / Cell::SIZE][(int)selected.y / Cell::SIZE];
                 cell = MakeCell(selectedType);
             }
         }

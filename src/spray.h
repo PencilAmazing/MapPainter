@@ -12,19 +12,21 @@ Cell CreateSpray()
     return Cell(CellType::Spray, _col, vx, 1);
 };
 
-void ProcessSpray(CellularData& data, CellMap& output, const CellMap& prevGeneration)
+void ProcessSpray(CellularData& data, CellMap& map)
 {
     // Copy data
-    Cell cell = prevGeneration[data.x][data.y];
+    Cell cell = map[data.x][data.y];
     // Apply motion equations
     // FIXME particles going too fast might pass through others
     // Apply line tracing collision later
     int targetx = std::clamp(data.x + cell._vx, 0, mapSize - 1);
     int targety = std::clamp(data.y + cell._vy, 0, mapSize - 1);
 
-    if (prevGeneration[targetx][targety]._id != CellType::Air) {
+    if (map[targetx][targety]._id != CellType::Air) {
         targetx = data.x;
         targety = data.y;
     }
-    output[targetx][targety] = cell;
+    map[data.x][data.y] = CreateAir();
+    cell.flipper = !cell.flipper;
+    map[targetx][targety] = cell;
 };
