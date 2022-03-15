@@ -69,9 +69,8 @@ CellType QuerySelectedType(int key)
         return CellType::Spray;
     case KEY_FOUR:
         return CellType::Moose;
-    default:
-        return CellType::Air;
     }
+    return CellType::Air;
 }
 
 void ProcessCell(const Cell& cell, CellularData& data, CellMap& map)
