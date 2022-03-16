@@ -11,6 +11,7 @@
 #include "src/static.h"
 #include "src/spray.h"
 #include "src/moose.h"
+#include "src/water.h"
 
 const std::vector<std::string> adjectives = {
     "untidy",
@@ -45,7 +46,8 @@ struct OperationPair Operations[] = {
     OperationPair {CreateSand, ProcessSand}, // Sand
     OperationPair {CreateStatic, ProcessStatic}, // Static
     OperationPair {CreateSpray, ProcessSpray}, // Spray
-    OperationPair {CreateMoose, ProcessMoose} // Moose
+    OperationPair {CreateMoose, ProcessMoose}, // Moose
+    OperationPair {CreateWater, ProcessWater} // Water
 };
 
 Cell MakeCell(CellType type)
@@ -69,6 +71,8 @@ CellType QuerySelectedType(int key)
         return CellType::Spray;
     case KEY_FOUR:
         return CellType::Moose;
+    case KEY_FIVE:
+        return CellType::Water;
     }
     return CellType::Air;
 }

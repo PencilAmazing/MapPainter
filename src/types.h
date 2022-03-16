@@ -19,5 +19,6 @@ enum class CellType : unsigned short int {
     Static,
     Spray,
     Moose, // ???
+    Water,
     END_TYPE // keep this at the end
 };
