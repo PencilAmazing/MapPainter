@@ -1,17 +1,24 @@
 ﻿#pragma once
 
 #include <iostream>
-#include <assert.h>
 #include <string>
+
+#define RAYGUI_IMPLEMENTATION
+#include "extras/raygui.h"
 
 #include "src/types.h"
 
 #include "src/cell.h"
+#include "src/stone.h"
+#include "src/lava.h"
 #include "src/sand.h"
 #include "src/static.h"
 #include "src/spray.h"
 #include "src/moose.h"
 #include "src/water.h"
+
+const int screenWidth = mapSize * Cell::SIZE;
+const int screenHeight = screenWidth + 60;
 
 const std::vector<std::string> adjectives = {
     "untidy",
@@ -47,7 +54,9 @@ struct OperationPair Operations[] = {
     OperationPair {CreateStatic, ProcessStatic}, // Static
     OperationPair {CreateSpray, ProcessSpray}, // Spray
     OperationPair {CreateMoose, ProcessMoose}, // Moose
-    OperationPair {CreateWater, ProcessWater} // Water
+    OperationPair {CreateWater, ProcessWater}, // Water
+    OperationPair {CreateLava, ProcessLava},
+    OperationPair {CreateStone, ProcessStone}
 };
 
 Cell MakeCell(CellType type)
@@ -97,3 +106,17 @@ void ProcessMap(CellMap& map, bool the_flipper)
         }
     }
 };
+
+void DrawUI(CellType& selectedType)
+{
+    int height = 40;
+    int width = 90;
+    for (int i = (int)CellType::Air; i < (int)CellType::END_TYPE; i++) {
+        CellType type = static_cast<CellType>(i);
+        Rectangle pos{ height / 2 + (width)*i, screenHeight - 50, width, height };
+        bool clicked = GuiButton(pos, (std::string("Particle\n") + std::string(Cellnames[i])).c_str());
+        if (clicked) {
+            selectedType = type; // It just works
+        }
+    }
+}

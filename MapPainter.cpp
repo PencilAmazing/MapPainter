@@ -16,11 +16,6 @@
 
 int main(void)
 {
-    // Initialization
-    //--------------------------------------------------------------------------------------
-    const int screenWidth = 600;
-    const int screenHeight = 650;
-
     CellType selectedType = CellType::Sand;
     bool the_flipper = true;
 
@@ -43,9 +38,10 @@ int main(void)
         the_flipper = !the_flipper;
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
         Vector2 mousepos = GetMousePosition();
 
+        // TODO: Replace with texture drawing
         for (int i = 0; i < mapSize; i++) {
             for (int j = 0; j < mapSize; j++) {
                 Cell& cell = workMap[i][j];
@@ -62,13 +58,15 @@ int main(void)
         debug += std::to_string(mousepos.x);
         debug += ' ';
         debug += std::to_string(mousepos.y);
-        DrawText(debug.c_str(), 10, screenHeight - 30, 12, BLACK);
+        DrawText(debug.c_str(), 10, 10, 12, BLACK);
 
         debug = "Rounded to: ";
         debug += std::to_string(Cell::RoundToNearestSize(mousepos).x);
         debug += ' ';
         debug += std::to_string(Cell::RoundToNearestSize(mousepos).y);
-        DrawText(debug.c_str(), 10, screenHeight - 50, 12, BLACK);
+        DrawText(debug.c_str(), 10, 30, 12, BLACK);
+
+        DrawUI(selectedType);
 
         EndDrawing();
 
