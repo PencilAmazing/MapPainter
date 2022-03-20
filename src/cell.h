@@ -14,7 +14,7 @@ public:
     int _vx, _vy;
     bool flipper;
 
-    Cell(CellType type = CellType::Air, Color color = SKYBLUE, short vx = 0, short vy = 0)
+    Cell(CellType type = CellType::Air, Color color = RAYWHITE, short vx = 0, short vy = 0)
         : _id(type), _col(color), _vx(vx), _vy(vy), flipper(false)
     {
     };
@@ -54,4 +54,20 @@ Cell CreateAir()
 void ProcessAir(CellularData&, CellMap&)
 {
     return;
+}
+
+CellularData IsTypeAdjacent(CellType type, CellularData location, CellMap& map)
+{
+    for (int i = -1; i <= 1; i++) {
+        if (location.x + i < 0 || location.x + i >= mapSize) continue;
+        for (int j = -1; j <= 1; j++) {
+            if (location.y + j < 0 || location.y + j >= mapSize) continue;
+            if (i == 0 && j == 0) continue;
+            if (map[location.x + i][location.y + j]._id == type) {
+                return CellularData{ location.x + i, location.y + j };
+            }
+        }
+    }
+
+    return nullData;
 }
