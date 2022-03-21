@@ -17,7 +17,7 @@
 int main(void)
 {
     CellType selectedType = CellType::Sand;
-    bool the_flipper = true;
+    int worldClock = 0;
 
     static_assert(mapSize % 2 == 0); // why not
 
@@ -34,8 +34,8 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        ProcessMap(workMap, the_flipper);
-        the_flipper = !the_flipper;
+        worldClock += 1;
+        ProcessMap(workMap, worldClock);
         BeginDrawing();
 
         ClearBackground(BLACK);

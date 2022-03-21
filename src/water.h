@@ -36,6 +36,6 @@ void ProcessWater(CellularData& data, CellMap& map)
     }
 
     map[data.x][data.y] = CreateAir();
-    cell.flipper = !cell.flipper;
+    cell.clock = data.clock;
     map[targetx][targety] = cell;
 }

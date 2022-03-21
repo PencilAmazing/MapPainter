@@ -12,10 +12,10 @@ public:
     CellType _id;
     Color _col;
     int _vx, _vy;
-    bool flipper;
+    unsigned short clock;
 
     Cell(CellType type = CellType::Air, Color color = RAYWHITE, short vx = 0, short vy = 0)
-        : _id(type), _col(color), _vx(vx), _vy(vy), flipper(false)
+        : _id(type), _col(color), _vx(vx), _vy(vy), clock(0)
     {
     };
 
@@ -63,8 +63,9 @@ CellularData IsTypeAdjacent(CellType type, CellularData location, CellMap& map)
         for (int j = -1; j <= 1; j++) {
             if (location.y + j < 0 || location.y + j >= mapSize) continue;
             if (i == 0 && j == 0) continue;
-            if (map[location.x + i][location.y + j]._id == type) {
-                return CellularData{ location.x + i, location.y + j };
+            Cell& cell = map[location.x + i][location.y + j];
+            if (cell._id == type) {
+                return CellularData{ location.x + i, location.y + j, cell.clock };
             }
         }
     }

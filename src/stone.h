@@ -26,7 +26,7 @@ void ProcessStone(CellularData& data, CellMap& map)
 
     Cell target = map[targetx][targety];
     if (target._id == CellType::Water || target._id == CellType::Lava) {
-        target.flipper = !target.flipper;
+        target.clock = data.clock;
         map[data.x][data.y] = target;
     } else if (map[targetx][targety]._id != CellType::Air) {
         // Collision
@@ -35,6 +35,6 @@ void ProcessStone(CellularData& data, CellMap& map)
         // FIXME momentum where
     }
     cell._vx *= GetRandomValue(-1, 1);
-    cell.flipper = !cell.flipper;
+    cell.clock = data.clock;
     map[targetx][targety] = cell;
 };

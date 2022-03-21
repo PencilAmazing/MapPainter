@@ -31,6 +31,6 @@ void ProcessStatic(CellularData& data, CellMap& map)
         // FIXME momentum where
     }
     map[data.x][data.y] = CreateAir();
-    cell.flipper = !cell.flipper;
+    cell.clock = data.clock;
     map[targetx][targety] = cell;
 };

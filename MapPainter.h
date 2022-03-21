@@ -93,15 +93,15 @@ void ProcessCell(const Cell& cell, CellularData& data, CellMap& map)
     Operations[(int)type].Process(data, map);
 }
 
-void ProcessMap(CellMap& map, bool the_flipper)
+void ProcessMap(CellMap& map, unsigned worldClock)
 {
     int mapSize = map.size();
     for (int i = 0; i < mapSize; i++) {
         for (int j = 0; j < mapSize; j++) {
             const Cell& cell = map[i][j];
-            CellularData data = { i,j };
+            CellularData data = { i, j, worldClock };
             // this is stupid
-            if (cell.flipper != the_flipper)
+            if (cell.clock < worldClock)
                 ProcessCell(cell, data, map);
         }
     }

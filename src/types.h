@@ -11,10 +11,11 @@ const int padding = 0;
 typedef struct CellularData {
     int x;
     int y;
+    unsigned clock;
 
     bool operator==(const CellularData& other) const
     {
-        return (other.x == x) && (other.y == y);
+        return (other.x == x) && (other.y == y) && (other.clock == clock);
     }
 
     bool operator!=(const CellularData& other) const
@@ -23,7 +24,7 @@ typedef struct CellularData {
     }
 } CellularData;
 
-const CellularData nullData = { -1,-1 };
+const CellularData nullData = { -1,-1, 0 };
 
 enum class CellType : unsigned short int {
     Air,

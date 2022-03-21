@@ -16,19 +16,18 @@ void ProcessSand(CellularData& data, CellMap& map)
 {
     // Copy data
     Cell cell = map[data.x][data.y];
+    cell.clock = data.clock;
     map[data.x][data.y] = CreateAir();
-    // Apply motion equations
-    // FIXME particles going too fast might pass through others
-    // Apply line tracing collision later
+
     int targetx = std::clamp(data.x + cell._vx, 0, mapSize - 1);
     int targety = std::clamp(data.y + cell._vy, 0, mapSize - 1);
 
-    Cell target = map[targetx][targety];
-    if (target._id == CellType::Water) {
+    Cell adjWater = map[targetx][targety];
+    if (adjWater._id == CellType::Water) {
         // Displace water
         // Not proud of this
-        target.flipper = !target.flipper;
-        map[data.x][data.y] = target;
+        adjWater.clock = data.clock;
+        map[data.x][data.y] = adjWater;
     } else if (map[targetx][targety]._id != CellType::Air) {
         // Collision
         targetx = data.x;
@@ -36,6 +35,5 @@ void ProcessSand(CellularData& data, CellMap& map)
         // FIXME momentum where
     }
     cell._vx *= GetRandomValue(-1, 1);
-    cell.flipper = !cell.flipper;
     map[targetx][targety] = cell;
 };
